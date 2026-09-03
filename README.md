@@ -32,6 +32,8 @@ A private, mobile-first wardrobe scanner and touch-friendly outfit builder built
 4. Add `https://YOUR-VERCEL-DOMAIN.vercel.app/closet` to the Supabase redirect URL allow list and change the Supabase Site URL to the production domain.
 5. Deploy.
 
+The supplied Supabase project URL and publishable key are also included as safe defaults in the app. Vercel environment variables are recommended because they make future project or key changes possible without editing source code.
+
 ## Security notes
 
 - All database tables use row-level security tied to `auth.uid()`.
