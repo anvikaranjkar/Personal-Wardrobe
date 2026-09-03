@@ -5,9 +5,6 @@ export async function middleware(request: NextRequest) {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL ?? "https://lqfkkjdwrzucvqxhfkar.supabase.co";
   const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? "sb_publishable_lUS36BDVXAHjJ-p9bsEraA_sGo-3jJ_";
 
-  // Let the setup screen render before environment variables are configured.
-  if (!url || !key) return NextResponse.next();
-
   let response = NextResponse.next({ request });
   const supabase = createServerClient(url, key, {
     cookies: {
@@ -23,14 +20,13 @@ export async function middleware(request: NextRequest) {
   });
 
   const { data: { user } } = await supabase.auth.getUser();
-  const isAuthPage = request.nextUrl.pathname === "/auth";
-  const isPublicFile = request.nextUrl.pathname.startsWith("/_next") || request.nextUrl.pathname.includes(".");
-
-  if (!user && !isAuthPage && !request.nextUrl.pathname.startsWith("/api") && !isPublicFile) {
-    return NextResponse.redirect(new URL("/auth", request.url));
+  if (!user) {
+    // Create a private Supabase identity without showing login or signup UI.
+    // The resulting session is stored in secure cookies and reused on later visits.
+    const { error } = await supabase.auth.signInAnonymously();
+    if (error) console.error("Anonymous wardrobe session could not be created", error.message);
   }
 
-  if (user && isAuthPage) return NextResponse.redirect(new URL("/closet", request.url));
   return response;
 }
 

@@ -1,7 +1,7 @@
 "use client";
 
 import { FormEvent, useEffect, useState } from "react";
-import { Check, LogOut, Pencil, Plus, Tag, Trash2, X } from "lucide-react";
+import { Check, Pencil, Plus, Tag, Trash2, X } from "lucide-react";
 import { PageHeader } from "@/components/page-header";
 import { Button, Input, SetupNotice } from "@/components/ui";
 import { createClient, isSupabaseConfigured } from "@/lib/supabase/client";
@@ -53,12 +53,6 @@ export default function SettingsPage() {
     else load();
   }
 
-  async function signOut() {
-    const supabase = createClient();
-    await supabase?.auth.signOut();
-    location.assign("/auth");
-  }
-
   return (
     <div className="safe-top min-h-dvh px-5">
       <PageHeader title="Personalize" back="/closet" />
@@ -89,8 +83,7 @@ export default function SettingsPage() {
             ))}
           </div>
 
-          <button onClick={signOut} className="mt-8 flex min-h-12 w-full items-center justify-center gap-2 rounded-full border border-line bg-paper text-sm font-semibold"><LogOut size={17} /> Sign out</button>
-          <p className="mt-5 text-center text-[10px] uppercase tracking-[.18em] text-muted">Private by design · Forme 1.0</p>
+          <p className="mt-8 text-center text-[10px] uppercase tracking-[.18em] text-muted">Your personal wardrobe · Forme 1.0</p>
         </div>
       )}
     </div>
